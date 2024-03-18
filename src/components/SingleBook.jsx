@@ -1,37 +1,30 @@
 import React from "react";
 import Card from "react-bootstrap/Card";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import CommentArea from "./CommentArea";
 
-class SingleBook extends React.Component {
-  state = { selected: false };
+//☑️SELEZIONE DEL LIBRO - modifichiamo il  componente SingleBook per aggiungere la funzione di selezione del libro.
 
-  render() {
-    const { asin, img, title, price } = this.props.book;
+//1)DESTRUTTURAZIONE delle PROPS: Le props passate al componente SingleBook vengono destrutturate per ottenere direttamente i valori di book e onSelect.
+function SingleBook(props) {
+  const { book, onSelect } = props;
 
-    return (
-      <Col xs={12} md={6} lg={3} className="my-3" key={asin}>
-        <Card>
-          <Card.Img variant="top" src={img} style={{ height: "15rem", objectFit: "contain" }} />
-          <Card.Body>
-            <Card.Title>{title}</Card.Title>
-            <Card.Text>{price}€</Card.Text>
-            <Button
-              variant="dark"
-              style={{ border: this.state.selected ? "2px solid red" : "1px solid black", height: "100%" }}
-              onClick={() => {
-                this.setState({ selected: !this.state.selected });
-              }}
-            >
-              Acquista
-            </Button>
-            {this.state.selected && <CommentArea asin={asin} />}
-          </Card.Body>
-        </Card>
-      </Col>
-    );
-  }
+  //2)FUNZIONE HANDLECLICK -
+  //Gestione del click: Viene dichiarata la funzione handleClick, che viene chiamata quando l'utente fa clic sul componente SingleBook.
+  //Questa funzione chiama la funzione onSelect (che è stata passata come prop) con l'asin del libro corrente come argomento.
+  const handleClick = () => {
+    onSelect(book.asin);
+  };
+
+  //3)Renderizzazione della carta del libro: Viene restituito il componente Card di Bootstrap con i dettagli del libro
+  //impostato l'evento onClick su questo componente, in modo che quando l'utente fa clic su di esso, venga chiamata la funzione handleClick.
+  return (
+    <Card style={{ width: "18rem", margin: "10px" }} onClick={handleClick}>
+      <Card.Img variant="top" src={book.img} />
+      <Card.Body>
+        <Card.Title>{book.title}</Card.Title>
+        <Card.Text>{book.price}</Card.Text>
+      </Card.Body>
+    </Card>
+  );
 }
 
 export default SingleBook;
