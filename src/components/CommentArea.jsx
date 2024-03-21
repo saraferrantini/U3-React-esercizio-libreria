@@ -4,21 +4,11 @@ import AddComment from "./AddComment";
 
 const API_URL = "https://striveschool-api.herokuapp.com/api/comments/";
 
-//N.B
-//asin è il codice identificativo del libro attualmente selezionato.
-//prevAsin è il codice identificativo del libro precedente.
-
-//1)☑️ USE -STATE abbiamo due variabili di stato: comments e prevAsin
-//a)comments è inizializzato con un array vuoto, che rappresenta l'elenco dei commenti.
-//b)prevAsin è inizializzato con null e rappresenta l'asin precedente.
 const CommentArea = ({ asin }) => {
   const [comments, setComments] = useState([]);
   const [prevAsin, setPrevAsin] = useState(null);
 
-  //2)☑️USE-EFFECT  viene utilizzata per effettuare la chiamata API quando cambia l'asin o quando il componente viene montato.
   useEffect(() => {
-    //getComments è una funzione asincrona che recupera i commenti dal server.
-    //getComments Viene chiamata all'interno di useEffect quando asin o prevAsin cambiano.
     const getComments = async () => {
       try {
         if (!asin) {
@@ -42,14 +32,10 @@ const CommentArea = ({ asin }) => {
       }
     };
 
-    //3)☑️CONDIZIONE che controlla se l'asin attuale è diverso dal prevAsin, e se sì, chiama la funzione getComments()
-    //per ottenere i commenti relativi al nuovo asin e aggiorna il valore di prevAsin con il nuovo asin
     if (asin && asin !== prevAsin) {
       getComments();
       setPrevAsin(asin);
     }
-
-    //La funzione all'interno di useEffect viene eseguita ogni volta che asin o prevAsin cambiano.
   }, [asin, prevAsin]);
 
   const deleteComment = async (commentId) => {
@@ -73,14 +59,13 @@ const CommentArea = ({ asin }) => {
     }
   };
 
-  //4)☑️ return
   return (
     <div>
-      {/*Al componente ADDCOMMENT viene passata una prop asin, che contiene il codice identificativo del libro attualmente selezionato. */}
       <AddComment asin={asin} />
-      {/* Al componente COMMENTLIST viene passata una prop comments, che contiene l'array dei commenti relativi al libro attualmente selezionato. Viene anche passata una prop deleteComment, */}
-      {/* che è la funzione utilizzata per eliminare un commento. Questo consente al componente CommentsList di visualizzare i commenti e di fornire un'opzione per eliminare ciascun commento. */}
-      <CommentsList comments={comments} deleteComment={deleteComment} />
+      {/* Aggiunta dell'attributo data-testid all'elemento <ul> */}
+      <ul data-testid="comments-list">
+        <CommentsList comments={comments} deleteComment={deleteComment} />
+      </ul>
     </div>
   );
 };

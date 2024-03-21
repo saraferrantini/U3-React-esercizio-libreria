@@ -16,6 +16,7 @@ function App() {
   return (
     <div>
       <MyNav />
+      <h1>React Testing Lecture</h1>
       <Welcome />
       <BookList books={scifiBooks} />
 
